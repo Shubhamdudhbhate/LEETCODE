@@ -106,5 +106,28 @@ int main() {
             totalSum += mat[i][j];
     cout << "Total sum of all elements = " << totalSum << endl;
 
+
+ // diagonal sum
+    int diagonalSum = 0;    
+    cout << "\nDiagonal Sum:\n";
+    for(int i = 0; i < rows && i < cols; i++) {
+        diagonalSum += mat[i][i];
+    }
+    cout << "Diagonal sum = " << diagonalSum << endl; 
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return 0;
 }
