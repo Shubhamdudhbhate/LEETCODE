@@ -7,7 +7,7 @@ using namespace std;
 class Solution
 {
 public:
-    vector<int> CircularnextGreaterElements(vector<int> &nums)
+    vector<int> CircularnextGreaterElements(vector<int> &nums)   // T.C O(n)
     {
         int n = nums.size();
         vector<int> result(n, -1); // Initialize with -1
@@ -42,7 +42,7 @@ public:
     vector<int> nextGreaterElement(vector<int> &arr)
     {
 
-        int n = arr.size();
+        int n = arr.size();     
         vector<int> ans(n, -1);
         stack<int> s;
 
