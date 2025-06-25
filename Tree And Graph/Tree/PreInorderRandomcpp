@@ -1,0 +1,140 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+struct TreeNode
+{
+    int val;
+    TreeNode *left, *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+class Solution
+{
+public:
+    int preIndex = 0;
+
+    TreeNode *buildTreeRecursive(vector<int> &preorder, vector<int> &inorder,int inStart, int inEnd,unordered_map<int, int> &inMap)
+    {
+        if (inStart > inEnd)
+            return NULL;
+
+        int rootVal = preorder[preIndex++];
+        TreeNode *root = new TreeNode(rootVal);
+
+        int inRoot = inMap[rootVal];
+
+        // Build left and right subtrees
+        root->left = buildTreeRecursive(preorder, inorder, inStart, inRoot - 1, inMap);
+        root->right = buildTreeRecursive(preorder, inorder, inRoot + 1, inEnd, inMap);
+
+        return root;
+    }
+
+    TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
+    {
+        unordered_map<int, int> inMap;
+        for (int i = 0; i < inorder.size(); ++i)
+        {
+            inMap[inorder[i]] = i;
+        }
+
+        return buildTreeRecursive(preorder, inorder, 0, inorder.size() - 1, inMap);
+    }
+};
+
+void inorderPrint(TreeNode *root)
+{
+    if (!root)
+        return;
+    inorderPrint(root->left);
+    cout << root->val << " ";
+    inorderPrint(root->right);
+}
+
+//_______________________________________________________________________________________________________________________________________________
+//___________________________________________________________________________________________________________________________________________________
+
+// ----------------- Find Index in Inorder -----------------
+int find(int in[], int val, int start, int end) {
+    for (int i = start; i <= end; i++) {
+        if (in[i] == val) return i;
+    }
+    return -1;
+}
+
+// ----------------- Build Tree from Inorder & Postorder -----------------
+TreeNode* buildFromInPost(int in[], int post[], int InStart, int InEnd, int &index) {
+    if (InStart > InEnd) return NULL;
+
+    TreeNode* root = new TreeNode(post[index--]);
+
+    int pos = find(in, root->val, InStart, InEnd);
+
+    root->left  = buildFromInPost(in, post, InStart, pos - 1, index);
+    root->right = buildFromInPost(in, post, pos + 1, InEnd, index);
+
+
+    return root;
+}
+
+// ----------------- Build Tree from Inorder & Preorder -----------------
+TreeNode* buildFromInPre(int in[], int pre[], int InStart, int InEnd, int &index) {
+    if (InStart > InEnd) return NULL;
+
+    TreeNode* Treeroot = new TreeNode(pre[index++]);
+
+    int pos = find(in, Treeroot->val, InStart, InEnd);
+
+    Treeroot->left  = buildFromInPre(in, pre, InStart, pos - 1, index);
+    Treeroot->right = buildFromInPre(in, pre, pos + 1, InEnd, index);
+
+    return Treeroot;
+}
+
+// ----------------- Print Tree Inorder -----------------
+void printInorder(TreeNode* Treeroot) {
+    if (!Treeroot) return;
+    printInorder(Treeroot->left);
+    cout << Treeroot->val << " ";
+    printInorder(Treeroot->right);
+}
+
+// ----------------- Main -----------------
+int main() {
+    // Example 1: Inorder + Postorder
+    int in[] = {4, 8, 2, 5, 1, 6, 3, 7};
+    int post[] = {8, 4, 5, 2, 6, 7, 3, 1};
+    int n = sizeof(in) / sizeof(in[0]);
+    int postIndex = n - 1;
+
+    TreeNode* Treeroot1 = buildFromInPost(in, post, 0, n - 1, postIndex);
+
+    cout << "Tree built from Inorder + Postorder (Inorder Traversal): ";
+    printInorder(Treeroot1);
+    cout << endl;
+
+    // Example 2: Inorder + Preorder
+    int pre[] = {1, 2, 4, 8, 5, 3, 6, 7};
+    int preIndex = 0;
+
+    TreeNode* Treeroot2 = buildFromInPre(in, pre, 0, n - 1, preIndex);
+
+    cout << "Tree built from Inorder + Preorder (Inorder Traversal): ";
+    printInorder(Treeroot2);
+    cout << endl;
+
+
+    vector<int> preorder = {3, 9, 20, 15, 7};
+    vector<int> inorder = {9, 3, 15, 20, 7};
+
+    Solution sol;
+    TreeNode *root = sol.buildTree(preorder, inorder);
+
+    cout << "Inorder of constructed tree: ";
+    inorderPrint(root); // Output should match the original inorder
+    cout << endl;
+
+    return 0;
+}
