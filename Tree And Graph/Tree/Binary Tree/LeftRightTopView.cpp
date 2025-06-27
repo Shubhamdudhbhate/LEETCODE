@@ -232,9 +232,8 @@ public:
     void Tview(TreeNode *root, int pos, vector<int> &Ans, vector<int> &Level, int l)
     {
 
-
-        if (!root) return;
-
+        if (!root)
+            return;
 
         if (Level[pos] > l)
         {
@@ -292,6 +291,55 @@ public:
 //     }
 // }
 
+class SolutionB
+{
+public:
+    // Step 1: Find min and max horizontal positions
+    void find(TreeNode *root, int pos, int &l, int &r)
+    {
+        if (!root)
+            return;
+
+        l = min(l, pos);
+        r = max(r, pos);
+
+        find(root->left, pos - 1, l, r);
+        find(root->right, pos + 1, l, r);
+    }
+
+    // Step 2: Recursively build bottom view
+    void Bview(TreeNode *root, int pos, vector<int> &Ans, vector<int> &Level, int depth)
+    {
+        if (!root)
+            return;
+
+        // Update if deeper level found for this vertical
+        if (Level[pos] <= depth)
+        {
+            Ans[pos] = root->val;
+            Level[pos] = depth;
+        }
+
+        Bview(root->left, pos - 1, Ans, Level, depth + 1);
+        Bview(root->right, pos + 1, Ans, Level, depth + 1);
+    }
+
+    // Step 3: Main function
+    vector<int> Bottomview(TreeNode *root)
+    {
+        int l = 0, r = 0;
+        find(root, 0, l, r);
+
+        int width = r - l + 1;
+        vector<int> Ans(width);
+        vector<int> Level(width, -1); // For bottom view, store max depth (start with -1)
+
+        Bview(root, -l, Ans, Level, 0); // -l to shift index to 0
+
+        return Ans;
+    }
+};
+
 int main()
 {
     // Example usage:
@@ -308,11 +356,13 @@ int main()
     cout << "\nRight view of the binary tree: ";
     rightView(root); // Output: 1 3 6
 
-
-
     solution sol1;
     Solution sol2;
+    SolutionB sol3;
 
+
+
+    
     cout << "\nTop view of the binary tree: ";
 
     vector<int> topView = sol2.Topview(root);
@@ -322,10 +372,23 @@ int main()
     }
 
 
-    cout << "\nTop view of the binary tree: "<< endl;
+
+
+
+    cout << "\nTop view of the binary tree: " << endl;
     vector<int> topView2 = sol1.TopViews(root);
 
     for (int val : topView2)
+    {
+        cout << val << " ";
+    }
+
+
+
+
+    cout << "\nBottom view of the binary tree using map: ";
+    vector<int> BottomView = sol3.Bottomview(root); // Output: 4 2 1 3 6
+    for (int val : BottomView)
     {
         cout << val << " ";
     }
