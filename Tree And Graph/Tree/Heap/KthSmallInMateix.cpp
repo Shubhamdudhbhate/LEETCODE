@@ -13,7 +13,7 @@ struct Cell {
     }
 };
 
-int kthSmallest(vector<vector<int>>& matrix, int k) {
+int kthSmallest(vector<vector<int>>& matrix, int k) {   // if sorted matrix
     int n = matrix.size();
     priority_queue<Cell, vector<Cell>, greater<Cell>> minHeap;
     set<pair<int, int>> visited;
@@ -47,6 +47,32 @@ int kthSmallest(vector<vector<int>>& matrix, int k) {
 
     return result;
 }
+
+
+int kthSmallestUnsorted(vector<vector<int>>& matrix, int k) {   // if Unsported Matrix
+    priority_queue<int> maxHeap;
+    for (auto& row : matrix) {
+        for (int val : row) {
+            maxHeap.push(val);
+            if (maxHeap.size() > k) {
+                maxHeap.pop();
+            }
+        }
+    }
+    return maxHeap.top();
+}
+
+
+// int kthSmallestUnsorted(vector<vector<int>>& matrix, int k) {
+//     vector<int> all;
+//     for (auto& row : matrix)
+//         for (int val : row)
+//             all.push_back(val);
+
+//     sort(all.begin(), all.end());
+//     return all[k - 1];
+// }
+
 
 
 int kthLargest(vector<vector<int>>& matrix, int k) {
