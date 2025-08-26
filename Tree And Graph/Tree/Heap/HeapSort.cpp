@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-// Heapify Down for Max Heap
+
 void heapifyDown(int arr[], int size, int i)
 {
     int largest = i;
@@ -20,7 +20,7 @@ void heapifyDown(int arr[], int size, int i)
     }
 }
 
-// Build Max Heap
+
 void buildMaxHeap(int arr[], int n)
 {
     for (int i = n/2 - 1; i >= 0; i--)
@@ -29,17 +29,16 @@ void buildMaxHeap(int arr[], int n)
     }
 }
 
-// Heap Sort Function
 void heapSort(int arr[], int n)
 {
-    // Step 1: Build Max Heap
+  
     buildMaxHeap(arr, n);
 
-    // Step 2: Extract elements one by one
+
     for (int i = n - 1; i > 0; i--)
     {
-        swap(arr[0], arr[i]);        // Move max to end
-        heapifyDown(arr, i, 0);      // Heapify reduced heap
+        swap(arr[0], arr[i]);      
+        heapifyDown(arr, i, 0);   
     }
 }
 
@@ -50,6 +49,9 @@ void printArray(int arr[], int n)
         cout << arr[i] << " ";
     cout << endl;
 }
+
+
+
 
 // Driver Code
 int main()

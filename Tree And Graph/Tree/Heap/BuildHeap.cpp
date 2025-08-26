@@ -15,7 +15,8 @@ public:
         TotalSize = capacity;
     }
 
-    // Heapify down from index i
+
+
     void heapifyDown(int i)
     {
         int largest = i;
@@ -34,6 +35,9 @@ public:
         }
     }
 
+
+
+    
     // Build heap from an array
     void buildHeap(int input[], int n)
     {
