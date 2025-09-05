@@ -43,11 +43,23 @@ int partitionLast(vector<int>& arr, int low, int high) {
 
 // Partition using middle element as pivot
 int partitionMiddle(vector<int>& arr, int low, int high) {
-    int mid = low + (high - low) / 2;
-    swap(arr[mid], arr[high]); // Move middle to end
-    return partitionLast(arr, low, high); // Reuse last pivot logic
-}
+    int mid = low + (high - low) / 2;  
+    int pivot = arr[mid];              
 
+    int i = low;       
+    int j = high;      
+    while (i <= j) {
+        while (arr[i] < pivot) i++;   
+        while (arr[j] > pivot) j--;  
+
+        if (i <= j) {
+            swap(arr[i], arr[j]);    
+            i++;
+            j--;
+        }
+    }
+    return i; 
+}
 // Partition using random element as pivot
 int partitionRandom(vector<int>& arr, int low, int high) {
     int randomIndex = low + rand() % (high - low + 1);
