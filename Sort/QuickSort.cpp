@@ -63,9 +63,25 @@ int partitionMiddle(vector<int>& arr, int low, int high) {
 // Partition using random element as pivot
 int partitionRandom(vector<int>& arr, int low, int high) {
     int randomIndex = low + rand() % (high - low + 1);
-    swap(arr[randomIndex], arr[high]);
-    return partitionLast(arr, low, high); // Reuse last pivot logic
+    int pivot = arr[randomIndex];
+
+    int i = low;
+    int j = high;
+
+    while (i <= j) {
+        while (arr[i] < pivot) i++;
+        while (arr[j] > pivot) j--;
+
+        if (i <= j) {
+            swap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    }
+
+    return i;
 }
+
 
 // QuickSort with function pointer
 void quickSort(vector<int>& arr, int low, int high, int (*partitionFunc)(vector<int>&, int, int)) {
