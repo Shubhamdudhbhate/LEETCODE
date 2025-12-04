@@ -2,104 +2,75 @@
 #include <vector>
 using namespace std;
 
-class MaxHeap
-{
-public:
-    int *arr;
-    int size;
-    int ToatalSize;
+class MaxHeap {
+    vector<int> heap;
 
-    MaxHeap(int n)
-    {
-        arr = new int[n];
-        size = 0;
-        ToatalSize = n;
+    void heapifyUp(int index) {
+        while (index > 0) {
+            int parent = (index - 1) / 2;
+            if (heap[index] > heap[parent]) {
+                swap(heap[index], heap[parent]);
+                index = parent;
+            } else break;
+        }
     }
 
-    void insert(int value)
-    {
-
-        if (size == ToatalSize)
-        {
-
-            cout << "Heap Overflow" << endl;
-            return;
-        }
-
-        arr[size] = value;
-        int index = size;
-        size++;
-
-        while (index > 0 && arr[(index - 1) / 2] < arr[index]) // compare  with parent upto last
-        {
-
-            swap(arr[index], arr[(index - 1) / 2]);
-            index = (index - 1) / 2;
-        }
-
-        cout << arr[index] << "Is inserted into the heap" << endl;
-    }
-
-    void deleteMax()
-    {
-        if (size == 0)
-        {
-            cout << "Heap Underflow" << endl;
-            return;
-        }
-
-        cout << "Deleted max element: " << arr[0] << endl;
-
-        arr[0] = arr[size - 1];
-        size--;
-
-        int index = 0;
-
-        // Heapify Down
-        while (index < size)
-        {
+    void heapifyDown(int index) {
+        int size = heap.size();
+        while (index < size) {
             int left = 2 * index + 1;
             int right = 2 * index + 2;
             int largest = index;
 
-            if (left < size && arr[left] > arr[largest])
+            if (left < size && heap[left] > heap[largest])
                 largest = left;
-            if (right < size && arr[right] > arr[largest])
+            if (right < size && heap[right] > heap[largest])
                 largest = right;
 
-            if (largest != index)
-            {
-                swap(arr[index], arr[largest]);
+            if (largest != index) {
+                swap(heap[index], heap[largest]);
                 index = largest;
-            }
-            else
-                break;
+            } else break;
         }
     }
 
-    void print()
-    {
+public:
+    void insert(int val) {
+        heap.push_back(val);
+        heapifyUp(heap.size() - 1);
+    }
 
-        for (int i = 0; i < size; i++)
-        {
+    int extractMax() {
+        if (heap.empty()) return -1;
+        int maxVal = heap[0];
+        heap[0] = heap.back();
+        heap.pop_back();
+        heapifyDown(0);
+        return maxVal;
+    }
 
-            cout << arr[i] << " ";
-        }
+    int peek() {
+        return heap.empty() ? -1 : heap[0];
+    }
+
+    void printHeap() {
+        for (int val : heap)
+            cout << val << " ";
+        cout << endl;
     }
 };
 
-int main()
-{
-    MaxHeap heap(10); // Max capacity 10
+int main() {
+    MaxHeap h;
+    h.insert(10);
+    h.insert(5);
+    h.insert(20);
+    h.insert(2);
 
-    heap.insert(50);
-    heap.insert(30);
-    heap.insert(60);
-    heap.insert(20);
-    heap.insert(90);
-    heap.insert(70);
+    h.printHeap(); 
 
-    heap.print();
+    cout << h.extractMax() << endl; 
+    h.printHeap(); 
 
     return 0;
 }
